@@ -54,7 +54,6 @@ const FilteredStaffPage = () => {
         }
     };
 
-    // Helper for consistent status badges
     const getStatusBadge = (status: string) => {
         switch (status) {
             case "AVAILABLE":

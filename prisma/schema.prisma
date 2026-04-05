@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  STATION
+}
+
+enum Type {
+  POLICE
+  FIRE
+}
+
+model Admin {
+  id        String    @id @default(uuid())
+  name      String
+  email     String    @unique
+  password  String
+  role      Role      @default(ADMIN)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  stations  Station[]
+}
+
+model Station {
+  id          String   @id @default(uuid())
+  name        String
+  email       String   @unique
+  password    String
+  rank        String
+  stationName String
+  role        Role     @default(STATION)
+  type        Type
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  admin       Admin?   @relation(fields: [adminId], references: [id])
+  adminId     String
+
+  staffs Staff[]
+}
+
+enum Status {
+  AVAILABLE
+  LEAVE
+  DUTY
+}
+
+model Staff {
+  id String @id @default(uuid())
+
+  name         String
+  forceNo      String @unique
+  rank         String
+  mobileNumber String
+  status       Status @default(AVAILABLE)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  duties Duty[]
+  leaves Leave[]
+
+  stationId     String
+  policeStation Station? @relation(fields: [stationId], references: [id])
+}
+
+model Duty {
+  id            String    @id @default(uuid())
+  date          DateTime
+  dutyType      String
+  location      String
+  reportingTime DateTime
+  relievingTime DateTime?
+  assignedBy    String
+
+  staffId String
+  staff   Staff  @relation(fields: [staffId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Leave {
+  id         String    @id @default(uuid())
+  leaveType  String
+  fromDate   DateTime
+  toDate     DateTime?
+  approvedBy String
+
+  staffId   String
+  staff     Staff    @relation(fields: [staffId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

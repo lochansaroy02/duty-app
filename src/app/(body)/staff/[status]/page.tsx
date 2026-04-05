@@ -27,7 +27,7 @@ const FilteredStaffPage = () => {
 
     const [staffData, setStaffData] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-
+    console.log(staffData);
     // Extract and format the status parameter (handles URL case vs DB case)
     const rawStatus = Array.isArray(params.status) ? params.status[0] : params.status;
     const currentStatus = rawStatus?.toUpperCase() || "";
@@ -75,7 +75,7 @@ const FilteredStaffPage = () => {
             {/* Navigation */}
             <Button
                 variant="ghost"
-                className="gap-2 text-muted-foreground hover:text-foreground"
+                className="gap-2 cursor-pointer text-muted-foreground hover:text-foreground"
                 onClick={() => router.back()}
             >
                 <ArrowLeft className="h-4 w-4" /> Back
@@ -115,14 +115,15 @@ const FilteredStaffPage = () => {
                                     <TableHead className="w-[250px] pl-6 font-semibold text-slate-900">Personnel</TableHead>
                                     <TableHead className="font-semibold text-slate-900">Force No.</TableHead>
                                     <TableHead className="font-semibold text-slate-900">Contact</TableHead>
+                                    <TableHead className="font-semibold text-slate-900">Rank</TableHead>
                                     <TableHead className="font-semibold text-slate-900">Status</TableHead>
                                     <TableHead className="text-right pr-6 font-semibold text-slate-900">Action</TableHead>
                                 </TableRow>
                             </TableHeader>
-                            <TableBody>
+                            <TableBody className="">
                                 {staffData.map((staff) => (
                                     <TableRow key={staff.id} className="hover:bg-slate-50/50 transition-colors">
-                                        <TableCell className="pl-6">
+                                        <TableCell className="pl-0">
                                             <div className="flex flex-col">
                                                 <span className="font-medium text-slate-900">{staff.name}</span>
                                                 <span className="text-xs text-muted-foreground font-mono mt-0.5">{staff.rank}</span>
@@ -130,16 +131,17 @@ const FilteredStaffPage = () => {
                                         </TableCell>
                                         <TableCell className="text-slate-600">{staff.forceNo}</TableCell>
                                         <TableCell className="text-slate-600">{staff.mobileNumber}</TableCell>
+                                        <TableCell className="text-slate-600">{staff.rank}</TableCell>
                                         <TableCell>{getStatusBadge(staff.status)}</TableCell>
                                         <TableCell className="text-right pr-6">
                                             <Button
                                                 variant="ghost"
                                                 size="sm"
-                                                className="text-primary hover:text-primary hover:bg-primary/10 gap-2"
+                                                className="text-primary cursor-pointer hover:text-primary hover:bg-primary/10 gap-2"
                                                 // Change this route to match your actual staff detail page structure
                                                 onClick={() => router.push(`/assign/${staff.id}`)}
                                             >
-                                                View Details <ExternalLink className="h-3 w-3" />
+                                                <ExternalLink className="h-3 w-3" />
                                             </Button>
                                         </TableCell>
                                     </TableRow>

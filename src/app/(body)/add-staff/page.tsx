@@ -9,7 +9,6 @@ import * as z from "zod";
 import { useAuthStore } from "@/store/authStore";
 import { useStaffStore } from "@/store/staffStore";
 
-// Shadcn UI Components
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -21,10 +20,11 @@ import {
     FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, Hash, Loader2, Phone, Shield, UserPlus } from "lucide-react";
-import { toast } from "sonner"; // Or your preferred toast library
+import { Separator } from "@/components/ui/separator";
 
-// Validation Schema
+import { ArrowLeft, FileUp, Hash, Loader2, Phone, Shield, UserPlus } from "lucide-react";
+import { toast } from "sonner";
+
 const formSchema = z.object({
     name: z.string().min(2, "Name must be at least 2 characters."),
     forceNo: z.string().min(3, "Force Number is required."),
@@ -37,8 +37,8 @@ const AddStaffPage = () => {
     const { user } = useAuthStore();
     const { createStaff } = useStaffStore();
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
 
-    // 1. Define form
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -49,7 +49,6 @@ const AddStaffPage = () => {
         },
     });
 
-    // 2. Handle Submit
     async function onSubmit(values: z.infer<typeof formSchema>) {
         if (!user?.id) {
             toast.error("You must be logged in to add staff.");
@@ -58,8 +57,6 @@ const AddStaffPage = () => {
 
         try {
             setIsSubmitting(true);
-
-            // Combining form values with user.id as the stationId/parameter
             await createStaff({
                 ...values,
                 stationId: user.id
@@ -76,36 +73,53 @@ const AddStaffPage = () => {
         }
     }
 
+    const handleBulkSuccess = () => {
+        setIsUploadModalOpen(false);
+        toast.success("Bulk import completed successfully!");
+        router.push("/dashboard");
+        router.refresh();
+    };
+
+
+    const handlebulkUpload = () => {
+        router.push("/add-staff/bulk-import")
+    }
     return (
         <div className="p-6 max-w-2xl mx-auto space-y-6">
-            {/* Navigation */}
             <Button
                 variant="ghost"
-                className="gap-2 text-muted-foreground hover:text-foreground"
+                className="gap-2 text-muted-foreground hover:text-foreground cursor-pointer"
                 onClick={() => router.back()}
             >
                 <ArrowLeft className="h-4 w-4" /> Back to Dashboard
             </Button>
 
             <Card className="border-slate-200 shadow-lg">
-                <CardHeader className="space-y-1">
-                    <div className="flex items-center gap-3">
-                        <div className="p-2 bg-primary/10 rounded-lg">
-                            <UserPlus className="h-6 w-6 text-primary" />
+                <CardHeader className="space-y-4">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <div className="p-2 bg-primary/10 rounded-lg">
+                                <UserPlus className="h-6 w-6 text-primary" />
+                            </div>
+                            <div>
+                                <CardTitle className="text-2xl">Add New Staff</CardTitle>
+                                <CardDescription>
+                                    Register personnel members manually or via Excel.
+                                </CardDescription>
+                            </div>
                         </div>
-                        <div>
-                            <CardTitle className="text-2xl">Add New Staff</CardTitle>
-                            <CardDescription>
-                                Register a new personnel member to the station database.
-                            </CardDescription>
-                        </div>
+                        <Button onClick={handlebulkUpload
+                        } variant="outline" className="gap-2 border-dashed border-primary/50 text-primary hover:bg-primary/5 cursor-pointer">
+                            <FileUp className="h-4 w-4" />
+                            Bulk Import
+                        </Button>
                     </div>
+                    <Separator />
                 </CardHeader>
 
                 <CardContent>
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-
                             <FormField
                                 control={form.control}
                                 name="name"
@@ -114,7 +128,7 @@ const AddStaffPage = () => {
                                         <FormLabel>Full Name</FormLabel>
                                         <FormControl>
                                             <div className="relative">
-                                                <Input placeholder="enter name" className="pl-9" {...field} />
+                                                <Input placeholder="John Doe" className="pl-9" {...field} />
                                                 <UserPlus className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
                                             </div>
                                         </FormControl>
@@ -179,7 +193,7 @@ const AddStaffPage = () => {
                             <div className="pt-4">
                                 <Button
                                     type="submit"
-                                    className="w-full h-11 text-base font-semibold"
+                                    className="w-full h-11 text-base font-semibold cursor-pointer"
                                     disabled={isSubmitting}
                                 >
                                     {isSubmitting ? (

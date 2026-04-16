@@ -31,6 +31,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useAuthStore } from "@/store/authStore";
+import { parseExcel } from "@/utils/excelToData";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -71,6 +72,21 @@ export default function LoginPage() {
     }
   };
 
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const data = await parseExcel(file);
+      console.log("Parsed Data:", data);
+
+
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-12">
       <div className="w-full max-w-md space-y-8">

@@ -2,7 +2,7 @@
 
 import { useAuthStore } from '@/store/authStore';
 import { useUIStore } from '@/store/uiStore'; // Import UI Store
-import { LayoutDashboard, Shield, Users, X } from 'lucide-react';
+import { LayoutDashboard, Shield, Siren, Users, X } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useMemo } from 'react';
 
@@ -16,6 +16,7 @@ const Sidebar = () => {
         const baseRoutes = [
             { name: "Dashboard", link: "/dashboard", icon: <LayoutDashboard size={16} /> },
             { name: "Add Staff", link: "/add-staff", icon: <Users size={16} /> },
+            { name: "Add Duty", link: "/duty", icon: <Siren size={16} /> },
         ];
         if (user?.role === 'ADMIN') {
             return [

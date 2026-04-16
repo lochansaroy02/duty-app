@@ -43,6 +43,7 @@ model Station {
   admin       Admin?   @relation(fields: [adminId], references: [id])
   adminId     String
 
+  duty   Duty[]
   staffs Staff[]
 }
 
@@ -52,39 +53,73 @@ enum Status {
   DUTY
 }
 
-model Staff {
-  id String @id @default(uuid())
+enum Condition {
+  DRUNK
+  BLACKLISTED
+  DISABLED
+  NORMAL
+}
 
+model Staff {
+  id           String    @id @default(uuid())
   name         String
-  forceNo      String @unique
+  pnoNo        String    @unique
   rank         String
   mobileNumber String
-  status       Status @default(AVAILABLE)
+  status       Status    @default(AVAILABLE)
+  capablity    Int?
+  condition    Condition @default(NORMAL)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  duties Duty[]
-  leaves Leave[]
+  lastDutyId String?
+  stationId  String
+  station    Station? @relation(fields: [stationId], references: [id])
 
-  stationId     String
-  policeStation Station? @relation(fields: [stationId], references: [id])
+  // Relations
+  leaves      Leave[]
+  assignments DutyAssign[]
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
 }
 
 model Duty {
-  id            String    @id @default(uuid())
-  date          DateTime
-  dutyType      String
-  location      String
+  id       String     @id @default(uuid())
+  dutyName String
+  dutyType Difficulty
+  location String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  assignments DutyAssign[]
+  station     Station?     @relation(fields: [stationId], references: [id])
+  stationId   String?
+}
+
+model DutyAssign {
+  id String @id @default(uuid())
+
+  staffId String
+  dutyId  String
+
   reportingTime DateTime
   relievingTime DateTime?
   assignedBy    String
 
-  staffId String
-  staff   Staff  @relation(fields: [staffId], references: [id])
+  staff Staff @relation(fields: [staffId], references: [id])
+  duty  Duty  @relation(fields: [dutyId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([staffId])
+  @@index([dutyId])
 }
 
 model Leave {

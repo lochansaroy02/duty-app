@@ -100,7 +100,7 @@ const StaffProfilePage = () => {
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                         <div className="flex items-center gap-4">
                             <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-2xl border-2 border-primary/20">
-                                {staff.name.charAt(0)}
+                                {staff.name?.charAt(0)}
                             </div>
                             <div>
                                 <CardTitle className="text-2xl font-bold">{staff.name}</CardTitle>

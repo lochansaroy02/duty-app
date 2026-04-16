@@ -1,120 +1,79 @@
 import { prisma } from '@/lib/prisma';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
-        const {
-            date,
-            dutyType,
-            location,
-            reportingTime,
-            assignedBy,
-            staffId
-        } = body;
 
+        const dutiesArray = Array.isArray(body) ? body : [body];
 
-        if (!date || !dutyType || !location) {
-            return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+        // 2. Validate that we actually have data
+        if (dutiesArray.length === 0) {
+            return NextResponse.json(
+                { error: 'No duty data provided' },
+                { status: 400 }
+            );
         }
 
-        // const staff = prisma.staff.findFirst({
-        //     where: {
-        //         id: staffId
-        //     }
-        // })
-        // if (!staff) {
-        //     return NextResponse.json({ error: "Staff not found" }, {
-        //         status: 404
-        //     })
-        // }
+        // 3. Basic validation for required fields in each object
+        const isValid = dutiesArray.every(item =>
+            item.dutyName && item.dutyType && item.location && item.stationId
+        );
 
+        if (!isValid) {
+            return NextResponse.json(
+                { error: 'One or more objects are missing required fields (dutyName, dutyType, location, stationId)' },
+                { status: 400 }
+            );
+        }
 
+        // 4. Use createMany for consistent bulk insertion
+        const result = await prisma.duty.createMany({
+            data: dutiesArray.map((duty) => ({
+                dutyName: duty.dutyName,
+                dutyType: duty.dutyType,
+                location: duty.location,
+                stationId: duty.stationId,
+            })),
+            skipDuplicates: true,
+        });
 
-        await prisma.staff.update({
-            data: {
-                status: "DUTY",
-            }, where: {
-                id: staffId
-            }
-        })
-        const newDuty = await prisma.duty.create({
-            data: {
-                date,
-                dutyType,
-                location,
-                reportingTime,
-                assignedBy,
-                staffId
-            }
-        })
-
-
-        return NextResponse.json(newDuty, {
+        return NextResponse.json({
+            message: `Successfully processed ${dutiesArray.length} entries.`,
+            count: result.count
+        }, {
             status: 201
-        })
+        });
 
     } catch (error: any) {
-        console.error('Error creating duty:', error);
+        console.error('Error creating duties:', error);
 
         return NextResponse.json(
-            { error: 'Internal Server Error' },
+            { error: 'Internal Server Error', details: error.message },
             { status: 500 }
         );
     }
 }
 
-// reliveeing time update;
-
-//  jab tk reiveing time ni add hota staff duty pe hi rahega
-
-export const PUT = async (request: Request) => {
+export const GET = async (req: NextRequest, res: NextResponse) => {
     try {
+        const { searchParams } = new URL(req.url);
+        const stationId = searchParams.get("stationId");
 
-        // search paramas me hm duty id fetch krnge 
-        const { searchParams } = new URL(request.url);
-        const dutyId = searchParams.get("dutyId");
-
-        const body = await request.json();
-        const {
-            relievingTime,
-            staffId
-        } = body;
-
-        if (!staffId || !relievingTime || !dutyId) {
-            return NextResponse.json({
-                message: "please provide all requiered details"
-            })
-        }
-        await prisma.staff.update({
-            data: {
-                status: "AVAILABLE",
-            }, where: {
-                id: staffId
-            }
-        })
-
-        await prisma.duty.update({
-            data: {
-                relievingTime: relievingTime
-            },
+        const duties = await prisma.duty.findMany({
             where: {
-                id: dutyId
+                stationId: stationId
             }
         })
 
-        return NextResponse.json({
-            message: "Duty changed"
-        }, {
-            status: 200
-        })
-
-    } catch (error) {
-        console.error('Error creating Duty :', error);
 
         return NextResponse.json(
-            { error: 'Internal Server Error' },
-            { status: 500 }
+            { data: duties },
+            { status: 200 }
         );
+
+    } catch (error) {
+
     }
+
 }

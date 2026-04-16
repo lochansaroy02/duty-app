@@ -14,7 +14,7 @@ export async function GET(request: Request) {
         const staff = await prisma.staff.findUnique({
             where: { id: staffId },
             include: {
-                duties: {
+                assignments: {
                     orderBy: {
                         createdAt: 'desc'
                     }

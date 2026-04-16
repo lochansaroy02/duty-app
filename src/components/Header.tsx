@@ -68,11 +68,11 @@ const Header = () => {
                         </Button>
 
                         {isLoggedIn && user?.id && (
-                            <Link href={`/${user.id}`} passHref>
+                           
                                 <Button asChild className="rounded-full bg-blue-800 hover:bg-blue-700 cursor-pointer h-10 w-10 p-0">
                                     <span className="text-white">{user?.name?.charAt(0)?.toUpperCase()}</span>
                                 </Button>
-                            </Link>
+
                         )}
                     </div>
                 </div>

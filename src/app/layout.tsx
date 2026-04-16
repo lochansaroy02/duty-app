@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
-      <body suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} antialiased bg-slate-50`}>
+      <body suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} antialiased `}>
         {children}
 
         <ToastProvider />

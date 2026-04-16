@@ -88,7 +88,7 @@ export default function LoginPage() {
     }
   };
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-12">
+    <div className="flex min-h-screen items-center justify-center  px-4 py-12">
       <div className="w-full max-w-md space-y-8">
         {/* Logo/Branding */}
         <div className="flex flex-col items-center text-center">
@@ -171,7 +171,7 @@ export default function LoginPage() {
             <CardFooter>
               <Button
                 type="submit"
-                className="w-full my-4 text-base"
+                className="w-full my-4 bg-blue-600 "
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (

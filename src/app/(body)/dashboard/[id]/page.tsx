@@ -106,7 +106,7 @@ const StaffProfilePage = () => {
                                 <CardTitle className="text-2xl font-bold">{staff.name}</CardTitle>
                                 <div className="flex items-center gap-2 mt-1">
                                     <Badge variant="secondary" className="font-mono">{staff.rank}</Badge>
-                                    <span className="text-muted-foreground text-sm">Force No: {staff.forceNo}</span>
+                                    <span className="text-muted-foreground text-sm">Force No: {staff.pnoNo}</span>
                                 </div>
                             </div>
                         </div>

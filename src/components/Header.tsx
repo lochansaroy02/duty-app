@@ -2,8 +2,7 @@
 
 import { useAuthStore } from "@/store/authStore";
 import { useUIStore } from "@/store/uiStore"; // Import UI Store
-import { LogOut, Menu } from "lucide-react";
-import Link from "next/link";
+import { Menu } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
@@ -59,13 +58,7 @@ const Header = () => {
                     </div>
 
                     <div className="flex gap-4 px-2 items-center">
-                        <Button
-                            onClick={handleLogout}
-                            className="bg-blue-500 hover:bg-blue-600 cursor-pointer"
-                        >
-                            {isLoggedIn ? "Logout" : "Login"}
-                            <LogOut className="ml-2 h-4 w-4" />
-                        </Button>
+                      
 
                         {isLoggedIn && user?.id && (
                            

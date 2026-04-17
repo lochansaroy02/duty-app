@@ -9,7 +9,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
             <Sidebar />
 
             <div className="flex flex-col min-h-screen lg:ml-[20%]">
-                <Header/>
+                <Header />
                 <main className="flex-1 p-6 mt-[72px]">
                     {children}
                 </main>

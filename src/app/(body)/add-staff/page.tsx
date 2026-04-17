@@ -27,7 +27,7 @@ import { toast } from "sonner";
 
 const formSchema = z.object({
     name: z.string().min(2, "Name must be at least 2 characters."),
-    forceNo: z.string().min(3, "Force Number is required."),
+    pnoNo: z.string().min(3, "pnoNo Number is required."),
     rank: z.string().min(1, "Rank is required (e.g., HC, Const, Insp)."),
     mobileNumber: z.string().min(10, "Enter a valid mobile number."),
 });
@@ -43,7 +43,7 @@ const AddStaffPage = () => {
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: "",
-            forceNo: "",
+            pnoNo: "",
             rank: "",
             mobileNumber: "",
         },
@@ -140,10 +140,10 @@ const AddStaffPage = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <FormField
                                     control={form.control}
-                                    name="forceNo"
+                                    name="pnoNo"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Force Number</FormLabel>
+                                            <FormLabel>pnoNo Number</FormLabel>
                                             <FormControl>
                                                 <div className="relative">
                                                     <Input placeholder="88723" className="pl-9" {...field} />

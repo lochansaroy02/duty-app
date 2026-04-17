@@ -260,7 +260,7 @@ const StaffAssignmentPage = () => {
             <div className="bg-muted p-4 rounded-lg flex justify-between items-center">
                 <div>
                     <h1 className="text-2xl font-bold">{staffData.name}</h1>
-                    <p className="text-sm text-muted-foreground">Force No: {staffData.forceNo}</p>
+                    <p className="text-sm text-muted-foreground">Force No: {staffData.pnoNo}</p>
                 </div>
                 <div className="text-right">
                     <span className={cn(

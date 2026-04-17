@@ -1,5 +1,6 @@
-import logo from "@/assets/logo.png"
-import Image from 'next/image'
+"use client";
+import logo from "@/assets/logo.png";
+import Image from 'next/image';
 
 interface LogoProps {
     width: number | `${number}` | undefined

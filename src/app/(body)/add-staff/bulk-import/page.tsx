@@ -37,7 +37,7 @@ const page = ({ onSuccess }: { onSuccess: () => void }) => {
         try {
             const finalData = parsedData.map((item) => ({
                 ...item,
-                forceNo: item.forceNo.toString(),
+                pnoNo: item.pnoNo.toString(),
                 mobileNumber: item.mobileNumber.toString(),
                 stationId: user?.id,
                 capablity: item.capablity ? parseInt(item.capablity) : 1,
@@ -76,7 +76,7 @@ const page = ({ onSuccess }: { onSuccess: () => void }) => {
                                 {parsedData.map((row, i) => (
                                     <TableRow key={i}>
                                         <TableCell>{row.name}</TableCell>
-                                        <TableCell>{row.forceNo}</TableCell>
+                                        <TableCell>{row.pnoNo}</TableCell>
                                         <TableCell>{row.rank}</TableCell>
                                     </TableRow>
                                 ))}

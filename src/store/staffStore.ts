@@ -1,7 +1,7 @@
 interface Staff {
     id: string;
     name: string;
-    forceNo: string;
+    pnoNo: string;
     rank: string;
     mobileNumber?: string;
     status?: string,

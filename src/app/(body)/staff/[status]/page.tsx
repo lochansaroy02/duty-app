@@ -128,7 +128,7 @@ const FilteredStaffPage = () => {
                                                 <span className="text-xs text-muted-foreground font-mono mt-0.5">{staff.rank}</span>
                                             </div>
                                         </TableCell>
-                                        <TableCell className="text-slate-600">{staff.forceNo}</TableCell>
+                                        <TableCell className="text-slate-600">{staff.pnoNo}</TableCell>
                                         <TableCell className="text-slate-600">{staff.mobileNumber}</TableCell>
                                         <TableCell className="text-slate-600">{staff.rank}</TableCell>
                                         <TableCell>{getStatusBadge(staff.status)}</TableCell>

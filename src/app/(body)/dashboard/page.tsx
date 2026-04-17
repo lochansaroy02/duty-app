@@ -135,7 +135,7 @@ const DashboardPage = () => {
                                         router.push(`/dashboard/${staff.id}`)
                                     }} key={staff.id} className="hover:bg-slate-50/50 transition-colors">
                                         <TableCell className="font-medium">{staff.name}</TableCell>
-                                        <TableCell className="text-muted-foreground">{staff.forceNo}</TableCell>
+                                        <TableCell className="text-muted-foreground">{staff.pnoNo}</TableCell>
                                         <TableCell>
                                             <span className="bg-slate-100 px-2 py-1 rounded text-xs font-bold text-slate-700">
                                                 {staff.rank}

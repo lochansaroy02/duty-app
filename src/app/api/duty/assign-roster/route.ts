@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
             const createdAssignments = [];
 
             for (const item of assignments) {
-                // 1. Fetch Staff (Excel pnNo maps to DB forceNo)
+                // 1. Fetch Staff (Excel pnNo maps to DB pnoNo)
                 const staff = await tx.staff.findUnique({
                     where: { pnoNo: String(item.pnNo) }
                 });

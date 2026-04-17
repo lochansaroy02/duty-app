@@ -4,18 +4,18 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(request: NextRequest) {
     try {
         const { searchParams } = new URL(request.url);
-        const forceNo = searchParams.get("forceNo");
+        const pnoNo = searchParams.get("pnoNo");
         const body = await request.json();
         const { reportingTime, assignedBy } = body;
 
         // 1. Validation
-        if (!forceNo || !reportingTime) {
+        if (!pnoNo || !reportingTime) {
             return NextResponse.json({ error: 'Staff ID and Reporting Time are required' }, { status: 400 });
         }
 
         // 2. Fetch Staff and check capability
         const user = await prisma.staff.findUnique({
-            where: { forceNo: forceNo }
+            where: { pnoNo: pnoNo }
         });
 
         if (!user) {
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
             });
 
             await tx.staff.update({
-                where: { forceNo: forceNo },
+                where: { pnoNo: pnoNo },
                 data: {
                     lastDutyId: duty.id,
                     status: "DUTY"

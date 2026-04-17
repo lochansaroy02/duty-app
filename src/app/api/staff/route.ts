@@ -13,10 +13,10 @@ export async function POST(request: NextRequest) {
         }
 
         // 2. Validation: Check required fields for every entry
-        const isValid = staffData.every(s => s.name && s.forceNo && s.rank && s.stationId);
+        const isValid = staffData.every(s => s.name && s.pnoNo && s.rank && s.stationId);
         if (!isValid) {
             return NextResponse.json({
-                error: 'Missing required fields (name, forceNo, rank, stationId) in one or more entries'
+                error: 'Missing required fields (name, pnoNo, rank, stationId) in one or more entries'
             }, { status: 400 });
         }
 
@@ -24,14 +24,14 @@ export async function POST(request: NextRequest) {
         const result = await prisma.staff.createMany({
             data: staffData.map(s => ({
                 name: s.name,
-                pnoNo: s.forceNo,
+                pnoNo: s.pnoNo,
                 rank: s.rank,
                 mobileNumber: s.mobileNumber,
                 stationId: s.stationId,
                 capablity: s.capablity ? parseInt(s.capablity) : null,
                 condition: s.condition || 'NORMAL',
             })),
-            skipDuplicates: true, // Prevents crash if a forceNo already exists
+            skipDuplicates: true, // Prevents crash if a pnoNo already exists
         });
 
         return NextResponse.json({

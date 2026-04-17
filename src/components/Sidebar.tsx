@@ -1,5 +1,6 @@
 "use client";
 
+import Logo from '@/assets/Logo';
 import { useAuthStore } from '@/store/authStore';
 import { useUIStore } from '@/store/uiStore';
 import {
@@ -7,8 +8,7 @@ import {
     LayoutDashboard,
     LogOut,
     Shield,
-    UserPlus,
-    X
+    UserPlus
 } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useMemo } from 'react';
@@ -51,21 +51,11 @@ const Sidebar = () => {
                 ${isSidebarOpen ? "translate-x-0 w-72" : "-translate-x-full w-72"}
             `}>
                 <div className='p-6 h-full w-full flex flex-col gap-8'>
-                    {/* Header & Logo */}
-                    <div className="flex items-center justify-between">
-                        <div className='flex items-center gap-3'>
-                            <div className="p-2 bg-primary/10 rounded-lg">
-                                <Shield size={28} className="text-primary" />
-                            </div>
-                            <div className="flex flex-col">
-                                <span className="font-bold text-slate-900 tracking-tight leading-none text-lg">POLICE</span>
-                                <span className="text-[10px] uppercase font-bold text-slate-400 tracking-widest mt-1">Management</span>
-                            </div>
-                        </div>
-                        <button onClick={closeSidebar} className="lg:hidden p-2 hover:bg-slate-100 rounded-full transition-colors">
-                            <X size={20} className="text-slate-500" />
-                        </button>
+
+                    <div className=' flex items-center justify-center'>
+                        <Logo width={100} height={100} />
                     </div>
+
 
                     <div className='flex flex-col justify-between h-full w-full'>
                         {/* Navigation Links */}
@@ -104,11 +94,12 @@ const Sidebar = () => {
                             <div
                                 onClick={() => {
                                     logout();
-                                    router.push('/login');
+                                    router.replace("/");
+                                    router.refresh();
                                 }}
                                 className="w-full cursor-pointer py-3 px-4 transition-all duration-200 rounded-xl flex items-center gap-3 text-slate-500 hover:bg-red-50 hover:text-red-600 group"
                             >
-                                <LogOut size={18} className="group-hover:text-red-600" />
+                                <LogOut size={18} className="group-hover:text-red-6 00" />
                                 <h1 className='text-sm font-semibold'>Sign Out</h1>
                             </div>
                         </div>

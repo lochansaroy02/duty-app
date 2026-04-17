@@ -4,10 +4,8 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
-
         const dutiesArray = Array.isArray(body) ? body : [body];
 
-        // 2. Validate that we actually have data
         if (dutiesArray.length === 0) {
             return NextResponse.json(
                 { error: 'No duty data provided' },
@@ -15,7 +13,6 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // 3. Basic validation for required fields in each object
         const isValid = dutiesArray.every(item =>
             item.dutyName && item.dutyType && item.location && item.stationId
         );
@@ -27,9 +24,8 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // 4. Use createMany for consistent bulk insertion
         const result = await prisma.duty.createMany({
-            data: dutiesArray.map((duty) => ({
+            data: dutiesArray.map((duty: any) => ({
                 dutyName: duty.dutyName,
                 dutyType: duty.dutyType,
                 location: duty.location,
@@ -41,13 +37,10 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({
             message: `Successfully processed ${dutiesArray.length} entries.`,
             count: result.count
-        }, {
-            status: 201
-        });
+        }, { status: 201 });
 
     } catch (error: any) {
         console.error('Error creating duties:', error);
-
         return NextResponse.json(
             { error: 'Internal Server Error', details: error.message },
             { status: 500 }
@@ -55,25 +48,28 @@ export async function POST(request: NextRequest) {
     }
 }
 
-export const GET = async (req: NextRequest, res: NextResponse) => {
+// FIXED: Removed 'res' parameter and added error handling return
+export async function GET(req: NextRequest) {
     try {
         const { searchParams } = new URL(req.url);
         const stationId = searchParams.get("stationId");
 
         const duties = await prisma.duty.findMany({
             where: {
-                stationId: stationId
+                stationId: stationId || undefined // Handles null cases
             }
-        })
-
+        });
 
         return NextResponse.json(
             { data: duties },
             { status: 200 }
         );
 
-    } catch (error) {
-
+    } catch (error: any) {
+        console.error('Error fetching duties:', error);
+        return NextResponse.json(
+            { error: 'Internal Server Error', details: error.message },
+            { status: 500 }
+        );
     }
-
 }
